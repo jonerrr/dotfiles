@@ -1,0 +1,10 @@
+[Unit]
+Description=backup timer for profile default in profiles.toml
+
+[Timer]
+OnCalendar=20:00
+Unit=resticprofile-backup@profile-default.service
+Persistent=true
+
+[Install]
+WantedBy=timers.target
