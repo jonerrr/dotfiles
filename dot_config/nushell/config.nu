@@ -761,4 +761,4 @@ $env.config = {
     ]
 }
 
-source "/var/home/jonah/.config/nushell/mise.nu"
+source "/home/jonah/.config/nushell/mise.nu"
