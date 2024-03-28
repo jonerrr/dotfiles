@@ -103,3 +103,4 @@ $env.PATH = ($env.PATH | split row (char esep) | prepend '/var/home/jonah/.local
 $env.EDITOR = nvim
 
 alias podman = distrobox-host-exec podman
+alias pd = podman compose
