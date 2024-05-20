@@ -104,5 +104,6 @@ $env.PATH = ($env.PATH | split row (char esep) | prepend '/home/jonah/go/bin/')
 
 $env.EDITOR = nvim
 
+alias ir = infisical run --env=dev -- 
 alias podman = distrobox-host-exec podman
 alias pd = podman compose
