@@ -101,7 +101,7 @@ $env.NU_PLUGIN_DIRS = [
 $env.PATH = ($env.PATH | split row (char esep) | prepend '/var/home/jonah/.cargo/bin/')
 $env.PATH = ($env.PATH | split row (char esep) | prepend '/var/home/jonah/.local/bin/')
 $env.PATH = ($env.PATH | split row (char esep) | prepend '/home/jonah/go/bin/')
-$env.PATH = ($env.PATH | split row (char esep) | prepend '/home/jonah/.local/share/pnpm/global/5')
+$env.PATH = ($env.PATH | split row (char esep) | prepend '/home/jonah/.local/share/pnpm')
 
 $env.EDITOR = nvim
 
