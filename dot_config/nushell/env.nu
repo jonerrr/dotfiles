@@ -108,3 +108,4 @@ $env.EDITOR = nvim
 alias ir = infisical run --env=dev -- 
 alias podman = distrobox-host-exec podman
 alias pd = podman compose
+alias csp = cargo sqlx prepare 
