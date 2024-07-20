@@ -102,6 +102,7 @@ $env.PATH = ($env.PATH | split row (char esep) | prepend '/var/home/jonah/.cargo
 $env.PATH = ($env.PATH | split row (char esep) | prepend '/var/home/jonah/.local/bin/')
 $env.PATH = ($env.PATH | split row (char esep) | prepend '/home/jonah/go/bin/')
 $env.PATH = ($env.PATH | split row (char esep) | prepend '/home/jonah/.local/share/pnpm')
+$env.PATH = ($env.PATH | split row (char esep) | prepend '/home/linuxbrew/.linuxbrew/bin')
 
 $env.EDITOR = nvim
 
