@@ -110,3 +110,6 @@ alias ir = infisical run --env=dev --
 alias podman = distrobox-host-exec podman
 alias pd = podman compose
 alias csp = cargo sqlx prepare 
+
+alias fcwk = fluxcd get kustomizations --watch
+alias fcga = flux get all -A --status-selector ready=false
