@@ -111,5 +111,5 @@ alias podman = distrobox-host-exec podman
 alias pd = podman compose
 alias csp = cargo sqlx prepare 
 
-alias fgk = fluxcd get kustomizations --watch
+alias fgk = flux get kustomizations --watch
 alias fga = flux get all -A --status-selector ready=false
