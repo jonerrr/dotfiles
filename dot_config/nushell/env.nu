@@ -104,7 +104,7 @@ $env.PATH = ($env.PATH | split row (char esep) | prepend '/home/jonah/go/bin/')
 $env.PATH = ($env.PATH | split row (char esep) | prepend '/home/jonah/.local/share/pnpm')
 # $env.PATH = ($env.PATH | split row (char esep) | prepend '/home/linuxbrew/.linuxbrew/bin')
 
-$env.EDITOR = nvim
+$env.EDITOR = 'nvim'
 
 alias ir = infisical run --env=dev -- 
 alias podman = distrobox-host-exec podman
