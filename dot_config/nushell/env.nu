@@ -107,6 +107,10 @@ $env.PATH = ($env.PATH | split row (char esep) | prepend '/home/jonah/.local/sha
 
 $env.EDITOR = 'nvim'
 
+if (($env | columns) | any {|col| $col == "PNPM_HOME"}) and (not ($env.PATH | split row ':' | any {|path| $path == $env.PNPM_HOME })) {
+    $env.PATH = ($env.PNPM_HOME + ":" + $env.PATH)
+}
+
 alias ir = infisical run --env=dev -- 
 alias podman = distrobox-host-exec podman
 alias pd = podman compose
