@@ -29,7 +29,8 @@ $env.PATH = ($env.PATH | split row (char esep) | prepend '~/.krew/bin')
 
 
 # temp fix for vulkan with gpu in distrobox, see https://github.com/89luca89/distrobox/issues/1687#issuecomment-2727166491
-# $env.VK_ICD_FILENAMES = '/run/host/usr/share/vulkan/icd.d/nvidia_icd.x86_64.json'
+# still needed bc it only sets for bash
+$env.VK_ICD_FILENAMES = '/run/host/usr/share/vulkan/icd.d/nvidia_icd.x86_64.json'
 
 # if (($env | columns) | any {|col| $col == "PNPM_HOME"}) and (not ($env.PATH | split row ':' | any {|path| $path == $env.PNPM_HOME })) {
 #     $env.PATH = ($env.PNPM_HOME + ":" + $env.PATH)
