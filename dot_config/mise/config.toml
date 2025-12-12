@@ -1,0 +1,204 @@
+[tools]
+# Dev utils
+"aqua:boyter/scc" = "latest"
+"aqua:cli/cli" = "latest"
+"github:jdx/fnox" = "latest"
+"github:cargo-bins/cargo-binstall" = "1.16.3"
+"cargo:cargo-edit" = "latest"
+"cargo:sqlx-cli" = { version = "latest", default-features = false, features = "native-tls,postgres" }
+"npm:@google/gemini-cli" = "latest"
+# k8s tools
+"aqua:fluxcd/flux2" = "latest"
+"aqua:kubernetes/kubernetes/kubectl" = "latest"
+"aqua:helm/helm" = "latest"
+"github:derailed/k9s" = "latest"
+# krew = "latest"
+# langs and runtimes
+"core:node" = "latest"
+# TODO: figure out why aqua latest tag is broken for some packages
+"github:astral-sh/uv" = "latest"
+"aqua:astral-sh/ruff" = "0.14.8"
+"aqua:protocolbuffers/protobuf/protoc" = "33.2"
+"aqua:pnpm" = "latest"
+"aqua:yarn" = "latest"
+# security / container tools
+"ubi:slsa-framework/slsa-verifier" = "latest"
+"github:sigstore/cosign" = "latest"
+"aqua:FiloSottile/age" = "latest"
+"aqua:getsops/sops" = "latest"
+"cargo:blue-build" = "latest"
+# backups
+"github:creativeprojects/resticprofile" = "latest"
+# misc
+"github:yt-dlp/yt-dlp" = "latest"
+"github:simulot/immich-go" = "latest"
+"cargo:dua-cli" = "latest"
+"cargo:tex-fmt" = "latest"
+
+[settings]
+experimental = true
+
+[tasks.devbox]
+depends = ["assert:not-distrobox"]
+description = "Create development distrobox"
+run = "distrobox-assemble create --file https://raw.githubusercontent.com/jonerrr/devbox/refs/heads/main/distrobox.ini"
+
+[tasks.update-dconf]
+raw = true  # For sudo
+depends = ["assert:not-distrobox"]
+description = "Update dconf keybindings"
+run = "sudo dconf load / < /etc/dconf/db/local.d/05-default-keybinds"
+
+[tasks."display:vm"]
+depends = ["assert:not-distrobox"]
+description = "Switch monitors to VM display"
+# /dev/i2c-7 is first monitor (DP = host, HDMI = guest)
+run = "ddcutil --bus 6 setvcp 60 0x01 & ddcutil --bus 7 setvcp 60 0x11 & wait"
+
+[tasks."display:host"]
+depends = ["assert:not-distrobox"]
+description = "Switch monitors to host display"
+# /dev/i2c-6 is secondary monitor (HDMI = host, DP = guest)
+run = "ddcutil --bus 6 setvcp 60 0x11 & ddcutil --bus 7 setvcp 60 0x01 & wait"
+
+[tasks."monitor:init"]
+depends = ["assert:not-distrobox"]
+description = "Initialize monitor settings for normal use"
+# TODO: update to 120hz when nvidia issue is resolved
+run = "gdctl set --logical-monitor --primary --monitor DP-1 --mode 1920x1080@119.982 --logical-monitor --monitor HDMI-1 --mode 1920x1080@60.000 --x 1920"
+
+# TODO: probably replace this with secondary primary
+[tasks."monitor:virtual-primary"]
+depends = ["assert:not-distrobox"]
+description = "Set virtual monitor as primary"
+# TODO: update to 120hz when nvidia issue is resolved
+run = "gdctl set --logical-monitor --monitor DP-1 --mode 1920x1080@119.982 --x 0 --y 0 --logical-monitor --monitor HDMI-1 --mode 1920x1080@60.000 --x 1920 --y 0 --logical-monitor --primary --monitor DP-2 --mode 3840x2160@60.000 --x 3840 --y 0"
+
+[tasks."monitor:cp"]
+raw = true  # For sudo
+depends = ["assert:not-distrobox"]
+description = "Copy monitor config for GDM"
+run = "sudo cp ~/.config/monitors.xml /etc/xdg/monitors.xml"
+
+[tasks."container:ollama"]
+description = "Start ollama container"
+run = "podman run -d --security-opt label=type:nvidia_container_t --device nvidia.com/gpu=all -v ollama:/root/.ollama -p 11434:11434 --name ollama docker.io/ollama/ollama:latest"
+
+[tasks."container:open-webui"]
+description = "Start open-webui container"
+run = "podman run -d --network slirp4netns:allow_host_loopback=true -p 3000:8080 -e OLLAMA_BASE_URL=http://host.containers.internal:11434 -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main"
+depends = ["container:ollama"]
+
+[tasks."waydroid:setup"]
+raw = true  # For sudo
+depends = ["assert:not-distrobox"]
+description = "Initialize waydroid with gapps"
+run = "sudo waydroid init -c https://ota.waydro.id/system -v https://ota.waydro.id/vendor -s GAPPS"
+
+[tasks."apply-policies"]
+raw = true  # For sudo
+depends = ["assert:not-distrobox"]
+description = "Apply selinux policies"
+usage = """
+arg "<dir>" help="Directory with policy files" default="~/"
+"""
+# TODO: add sudo prompt probably
+run = """
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Directory containing .te files
+# TE_DIR=${1:-.}
+TE_DIR=${usage_dir}
+
+# Ask for sudo up-front so the task runs end-to-end.
+sudo -v
+
+# Run the policy application as root.
+sudo TE_DIR="$TE_DIR" bash -s <<'ROOTSCRIPT'
+set -euo pipefail
+
+echo "Applying SELinux policies from directory: $TE_DIR"
+
+# Check if required tools are installed
+for cmd in checkmodule semodule_package semodule; do
+  if ! command -v "$cmd" &> /dev/null; then
+    echo "Error: $cmd is required but not installed."
+    echo "Please install the selinux-policy-devel package."
+    exit 1
+  fi
+done
+
+# Find all .te files in the specified directory
+echo "Searching for SELinux policy files in $TE_DIR..."
+TE_FILES=$(find "$TE_DIR" -type f -name "*.te")
+
+if [ -z "$TE_FILES" ]; then
+  echo "No .te files found in $TE_DIR"
+  exit 0
+fi
+
+# Process each .te file
+for te_file in $TE_FILES; do
+  base_name=$(basename "$te_file" .te)
+  mod_file="${te_file%.te}.mod"
+  pp_file="${te_file%.te}.pp"
+
+  echo "Processing $te_file..."
+
+  # Compile the .te file into a module
+  echo "  - Compiling module..."
+  checkmodule -M -m -o "$mod_file" "$te_file"
+
+  # Package the module
+  echo "  - Packaging module..."
+  semodule_package -o "$pp_file" -m "$mod_file"
+
+  # Install the module
+  echo "  - Installing module $base_name..."
+  semodule -i "$pp_file"
+
+  echo "  ✓ Successfully installed $base_name"
+done
+
+echo "All SELinux policies have been applied."
+ROOTSCRIPT
+"""
+
+[tasks."restore-vms"]
+depends = ["assert:not-distrobox"]
+confirm = "Are you sure you want to restore qemu configurations? This will overwrite /etc/libvirt/qemu."
+description = "Restore qemu configurations to /etc/libvirt/qemu"
+run = """
+sudo systemctl stop libvirtd
+sudo rsync -av --delete --chown=root:root /home/jonah/qemu/ /etc/libvirt/qemu/
+sudo restorecon -R /etc/libvirt/qemu || true
+sudo systemctl start libvirtd
+"""
+
+[tasks."install-pano"]
+description = "Install pano gnome extension from source. Must have gnome-shell-pano cloned."
+dir = "~/Github/gnome-shell-pano"
+run = """
+git pull
+yarn install
+yarn build
+mkdir -p $HOME/.local/share/gnome-shell/extensions
+ln -s "$PWD/dist" "$HOME/.local/share/gnome-shell/extensions/pano@elhan.io"
+echo "Pano installed. Please restart gnome shell (Alt+F2, r, Enter) and enable the extension."
+"""
+
+[tasks."assert:not-distrobox"]
+quiet = true
+description = "Fail if running inside a Distrobox container"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Distrobox sets these when you enter the container.
+if [[ -n "${DISTROBOX_ENTER_PATH:-}" || -n "${DISTROBOX_CONTAINER_NAME:-}" ]]; then
+  echo "Error: this task must not be run inside a Distrobox container." >&2
+  exit 1
+fi
+"""

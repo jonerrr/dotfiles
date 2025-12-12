@@ -23,7 +23,7 @@ $env.EDITOR = 'nvim'
 # $env.PATH = ($env.PATH | split row (char esep) | prepend '/var/home/jonah/.cargo/bin/')
 # $env.PATH = ($env.PATH | split row (char esep) | prepend '/var/home/jonah/.local/bin/')
 # $env.PATH = ($env.PATH | split row (char esep) | prepend '/home/jonah/go/bin/')
-$env.PATH = ($env.PATH | split row (char esep) | prepend '~/.krew/bin')
+# $env.PATH = ($env.PATH | split row (char esep) | prepend '~/.krew/bin')
 # $env.PATH = ($env.PATH | split row (char esep) | prepend '/home/jonah/.local/share/pnpm')
 # $env.PATH = ($env.PATH | split row (char esep) | prepend '/home/linuxbrew/.linuxbrew/bin')
 
@@ -36,7 +36,7 @@ $env.VK_ICD_FILENAMES = '/run/host/usr/share/vulkan/icd.d/nvidia_icd.x86_64.json
 #     $env.PATH = ($env.PNPM_HOME + ":" + $env.PATH)
 # }
 
-alias podman = distrobox-host-exec podman
+# alias podman = distrobox-host-exec podman
 alias pd = podman compose
 alias csp = cargo sqlx prepare
 
