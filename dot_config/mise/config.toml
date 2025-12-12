@@ -43,11 +43,14 @@ depends = ["assert:not-distrobox"]
 description = "Create development distrobox"
 run = "distrobox-assemble create --file https://raw.githubusercontent.com/jonerrr/devbox/refs/heads/main/distrobox.ini"
 
+[tasks.export-code]
+description = "Export VSCode from distrobox to host (with wayland set as display server)"
+run = "distrobox-export --app code --extra-flags '--ozone-platform-hint=auto %U'"
+
 [tasks.update-dconf]
-raw = true  # For sudo
 depends = ["assert:not-distrobox"]
 description = "Update dconf keybindings"
-run = "sudo dconf load / < /etc/dconf/db/local.d/05-default-keybinds"
+run = "dconf load / < /etc/dconf/db/local.d/05-default-keybinds"
 
 [tasks."display:vm"]
 depends = ["assert:not-distrobox"]
