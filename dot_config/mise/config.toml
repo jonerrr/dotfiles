@@ -68,14 +68,14 @@ run = "ddcutil --bus 6 setvcp 60 0x11 & ddcutil --bus 7 setvcp 60 0x01 & wait"
 depends = ["assert:not-distrobox"]
 description = "Initialize monitor settings for normal use"
 # TODO: update to 120hz when nvidia issue is resolved
-run = "gdctl set --logical-monitor --primary --monitor DP-1 --mode 1920x1080@119.982 --logical-monitor --monitor HDMI-1 --mode 1920x1080@60.000 --x 1920"
+run = "gdctl set --logical-monitor --primary --monitor DP-1 --mode 1920x1080@119.982 --logical-monitor --monitor HDMI-1 --mode 1920x1080@119.982 --x 1920"
 
 # TODO: probably replace this with secondary primary
 [tasks."monitor:virtual-primary"]
 depends = ["assert:not-distrobox"]
 description = "Set virtual monitor as primary"
 # TODO: update to 120hz when nvidia issue is resolved
-run = "gdctl set --logical-monitor --monitor DP-1 --mode 1920x1080@119.982 --x 0 --y 0 --logical-monitor --monitor HDMI-1 --mode 1920x1080@60.000 --x 1920 --y 0 --logical-monitor --primary --monitor DP-2 --mode 3840x2160@60.000 --x 3840 --y 0"
+run = "gdctl set --logical-monitor --monitor DP-1 --mode 1920x1080@119.982 --x 0 --y 0 --logical-monitor --monitor HDMI-1 --mode 1920x1080@119.982 --x 1920 --y 0 --logical-monitor --primary --monitor DP-2 --mode 3840x2160@60.000 --x 3840 --y 0"
 
 [tasks."monitor:cp"]
 raw = true  # For sudo
