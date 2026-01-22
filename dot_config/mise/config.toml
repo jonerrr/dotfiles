@@ -15,6 +15,7 @@
 # krew = "latest"
 # langs and runtimes
 "core:node" = "latest"
+"core:go" = "latest"
 # TODO: figure out why aqua latest tag is broken for some packages
 "github:astral-sh/uv" = "latest"
 "aqua:astral-sh/ruff" = "0.14.8"
@@ -34,6 +35,7 @@
 "github:simulot/immich-go" = "latest"
 "cargo:dua-cli" = "latest"
 "cargo:tex-fmt" = "latest"
+"go:github.com/bigwhite/issue2md/cmd/issue2md" = "latest"
 
 [settings]
 experimental = true
