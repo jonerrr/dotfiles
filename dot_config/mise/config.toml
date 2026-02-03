@@ -36,6 +36,7 @@
 "cargo:dua-cli" = "latest"
 "cargo:tex-fmt" = "latest"
 "go:github.com/bigwhite/issue2md/cmd/issue2md" = "latest"
+"aqua:jdx/usage" = "latest"
 
 [settings]
 experimental = true
@@ -99,6 +100,23 @@ raw = true  # For sudo
 depends = ["assert:not-distrobox"]
 description = "Initialize waydroid with gapps"
 run = "sudo waydroid init -c https://ota.waydro.id/system -v https://ota.waydro.id/vendor -s GAPPS"
+
+[tasks."enroll-secure-boot-keys"]
+raw = true  # For sudo
+depends = ["assert:not-distrobox"]
+description = "Enroll secure boot keys for blue-build akmod"
+# Based on https://github.com/blue-build/base-images/blob/main/files/justfiles/30-secureboot.just
+run = """
+#!/usr/bin/env bash
+
+ENROLLMENT_PASSWORD="bluebuild"
+SECUREBOOT_KEY=/etc/pki/akmods/certs/akmods-blue-build.der
+# MY_KEY=/etc/pki/akmods/certs/akmods-jonah.der
+sudo mokutil --timeout -1
+echo -e "$ENROLLMENT_PASSWORD\n$ENROLLMENT_PASSWORD" | sudo mokutil --import "$SECUREBOOT_KEY"
+# "$MY_KEY"
+echo 'At next reboot, the mokutil UEFI menu UI will be displayed (*QWERTY* keyboard input and navigation).\nThen, select "Enroll MOK", and input "bluebuild" as the password'
+"""
 
 [tasks."apply-policies"]
 raw = true  # For sudo
