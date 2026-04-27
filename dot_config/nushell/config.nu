@@ -26,7 +26,8 @@ $env.EDITOR = 'nvim'
 # $env.PATH = ($env.PATH | split row (char esep) | prepend '~/.krew/bin')
 # $env.PATH = ($env.PATH | split row (char esep) | prepend '/home/jonah/.local/share/pnpm')
 # $env.PATH = ($env.PATH | split row (char esep) | prepend '/home/linuxbrew/.linuxbrew/bin')
-
+# make vscode default to wayland
+$env.ELECTRON_OZONE_PLATFORM_HINT = 'auto'
 
 # temp fix for vulkan with gpu in distrobox, see https://github.com/89luca89/distrobox/issues/1687#issuecomment-2727166491
 # still needed bc it only sets for bash

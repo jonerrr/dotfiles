@@ -32,6 +32,7 @@
 "github:creativeprojects/resticprofile" = "latest"
 # misc
 "github:yt-dlp/yt-dlp" = "latest"
+"aqua:aristocratos/btop" = "latest"
 "github:simulot/immich-go" = "latest"
 "cargo:dua-cli" = "latest"
 "cargo:tex-fmt" = "latest"
@@ -48,7 +49,7 @@ run = "distrobox-assemble create --file https://raw.githubusercontent.com/jonerr
 
 [tasks.export-code]
 description = "Export VSCode from distrobox to host (with wayland set as display server)"
-run = "distrobox-export --app code --extra-flags '--ozone-platform-hint=auto %U'"
+run = "distrobox-export --app code --extra-flags '--ozone-platform-hint=auto %U' && distrobox-export --bin /usr/bin/code"
 
 [tasks.update-dconf]
 depends = ["assert:not-distrobox"]
@@ -191,6 +192,7 @@ ROOTSCRIPT
 
 [tasks."restore-vms"]
 depends = ["assert:not-distrobox"]
+raw = true  # For sudo
 confirm = "Are you sure you want to restore qemu configurations? This will overwrite /etc/libvirt/qemu."
 description = "Restore qemu configurations to /etc/libvirt/qemu"
 run = """
@@ -198,18 +200,6 @@ sudo systemctl stop libvirtd
 sudo rsync -av --delete --chown=root:root /home/jonah/qemu/ /etc/libvirt/qemu/
 sudo restorecon -R /etc/libvirt/qemu || true
 sudo systemctl start libvirtd
-"""
-
-[tasks."install-pano"]
-description = "Install pano gnome extension from source. Must have gnome-shell-pano cloned."
-dir = "~/Github/gnome-shell-pano"
-run = """
-git pull
-yarn install
-yarn build
-mkdir -p $HOME/.local/share/gnome-shell/extensions
-ln -s "$PWD/dist" "$HOME/.local/share/gnome-shell/extensions/pano@elhan.io"
-echo "Pano installed. Please restart gnome shell (Alt+F2, r, Enter) and enable the extension."
 """
 
 [tasks."assert:not-distrobox"]
