@@ -50,6 +50,7 @@ run = "distrobox-assemble create --file https://raw.githubusercontent.com/jonerr
 [tasks."project:dump"]
 description = "Dump non-gitignored files into Sync directory"
 shell = "nu -c"
+env = { COPYFILE_DISABLE = "1" }  # Disable ._ files on macOS
 run = """
 git ls-files -z -c -o --exclude-standard
 | split row (char nul)
