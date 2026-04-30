@@ -47,6 +47,22 @@ depends = ["assert:not-distrobox"]
 description = "Create development distrobox"
 run = "distrobox-assemble create --file https://raw.githubusercontent.com/jonerrr/devbox/refs/heads/main/distrobox.ini"
 
+[tasks."project:dump"]
+description = "Dump non-gitignored files into Sync directory"
+shell = "nu -c"
+run = """
+git ls-files -z -c -o --exclude-standard
+| split row (char nul)
+| where { |f| $f != "" and ($f | path exists) }
+| str join (char nul)
+| ^tar --null -czvf ~/Sync/project-state.tar.gz -T -
+"""
+
+[tasks."project:pull"]
+confirm = "BE SURE TO SAVE ANY UNCOMMITTED WORK! This will overwrite all non-gitignored files in the project directory with the last dump from Sync."
+description = "Overwrite project files from Sync directory"
+run = "tar -xzvf ~/Sync/project-state.tar.gz"
+
 [tasks.export-code]
 description = "Export VSCode from distrobox to host (with wayland set as display server)"
 run = "distrobox-export --app code --extra-flags '--ozone-platform-hint=auto %U' && distrobox-export --bin /usr/bin/code"
