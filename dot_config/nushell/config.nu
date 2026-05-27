@@ -45,4 +45,6 @@ alias fgk = flux get kustomizations --watch
 alias fga = flux get all -A --status-selector ready=false
 alias frc = flux reconcile kustomization cluster-apps --with-source
 
+alias dht = distrobox-host-exec
+
 use ($nu.default-config-dir | path join mise.nu)
