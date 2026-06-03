@@ -6,7 +6,7 @@
 "github:cargo-bins/cargo-binstall" = "1.16.3"
 "cargo:cargo-edit" = "latest"
 "cargo:sqlx-cli" = { version = "latest", default-features = false, features = "native-tls,postgres" }
-"npm:@google/gemini-cli" = "latest"
+"aqua:zellij-org/zellij" = "latest"
 # k8s tools
 "aqua:fluxcd/flux2" = "latest"
 "aqua:kubernetes/kubernetes/kubectl" = "latest"
