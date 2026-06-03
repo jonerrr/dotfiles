@@ -38,6 +38,7 @@
 "cargo:tex-fmt" = "latest"
 "go:github.com/bigwhite/issue2md/cmd/issue2md" = "latest"
 "aqua:jdx/usage" = "latest"
+"github:pranshuparmar/witr" = "latest"
 
 [settings]
 experimental = true
