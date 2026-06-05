@@ -42,6 +42,7 @@
 
 [settings]
 experimental = true
+minimum_release_age = "1d"
 
 [tasks.devbox]
 depends = ["assert:not-distrobox"]
