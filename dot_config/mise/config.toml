@@ -44,6 +44,9 @@
 experimental = true
 minimum_release_age = "1d"
 
+[settings.github]
+use_git_credentials = true
+
 [tasks.devbox]
 depends = ["assert:not-distrobox"]
 description = "Create development distrobox"
