@@ -39,9 +39,11 @@
 "go:github.com/bigwhite/issue2md/cmd/issue2md" = "latest"
 "aqua:jdx/usage" = "latest"
 "github:pranshuparmar/witr" = "latest"
+"aqua:openai/codex" = "latest"
 
 [settings]
 experimental = true
+lockfile = true
 minimum_release_age = "1d"
 
 [settings.github]
