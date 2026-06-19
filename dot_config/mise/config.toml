@@ -7,6 +7,7 @@
 "cargo:cargo-edit" = "latest"
 "cargo:sqlx-cli" = { version = "latest", default-features = false, features = "native-tls,postgres" }
 "aqua:zellij-org/zellij" = "latest"
+"npm:@shopify/cli@latest" = "latest"
 # k8s tools
 "aqua:fluxcd/flux2" = "latest"
 "aqua:kubernetes/kubernetes/kubectl" = "latest"
