@@ -29,6 +29,9 @@ $env.EDITOR = 'nvim'
 # make vscode default to wayland
 $env.ELECTRON_OZONE_PLATFORM_HINT = 'auto'
 
+# bitwarden ssh agent
+$env.SSH_AUTH_SOCK = $"($env.home)/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock"
+
 # temp fix for vulkan with gpu in distrobox, see https://github.com/89luca89/distrobox/issues/1687#issuecomment-2727166491
 # still needed bc it only sets for bash
 $env.VK_ICD_FILENAMES = '/run/host/usr/share/vulkan/icd.d/nvidia_icd.x86_64.json'
