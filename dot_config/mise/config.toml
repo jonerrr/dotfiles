@@ -21,7 +21,6 @@
 # TODO: figure out why aqua latest tag is broken for some packages
 "github:astral-sh/uv" = "latest"
 "aqua:astral-sh/ruff" = "0.14.8"
-"aqua:protocolbuffers/protobuf/protoc" = "33.2"
 "aqua:pnpm" = "latest"
 "aqua:yarn" = "latest"
 # security / container tools
@@ -42,6 +41,7 @@
 "aqua:jdx/usage" = "latest"
 "github:pranshuparmar/witr" = "latest"
 "aqua:openai/codex" = "latest"
+"aqua:anthropics/claude-code" = "latest"
 
 [settings]
 experimental = true
