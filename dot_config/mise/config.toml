@@ -3,10 +3,10 @@
 "aqua:boyter/scc" = "latest"
 "aqua:cli/cli" = "latest"
 "github:jdx/fnox" = "latest"
-"github:cargo-bins/cargo-binstall" = "1.16.3"
+"github:cargo-bins/cargo-binstall" = "latest"
 "cargo:cargo-edit" = "latest"
 "cargo:sqlx-cli" = { version = "latest", default-features = false, features = "native-tls,postgres" }
-"aqua:zellij-org/zellij" = "latest"
+# "aqua:zellij-org/zellij" = "latest"
 "npm:@shopify/cli" = "latest"
 "github:containers/podman-tui" = "latest"
 # k8s tools
@@ -20,7 +20,7 @@
 "core:go" = "latest"
 # TODO: figure out why aqua latest tag is broken for some packages
 "github:astral-sh/uv" = "latest"
-"aqua:astral-sh/ruff" = "0.14.8"
+"aqua:astral-sh/ruff" = "latest"
 "aqua:pnpm" = "latest"
 "aqua:yarn" = "latest"
 # security / container tools
@@ -42,6 +42,19 @@
 "github:pranshuparmar/witr" = "latest"
 "aqua:openai/codex" = "latest"
 "aqua:anthropics/claude-code" = "latest"
+"github:can1357/oh-my-pi" = "latest"
+
+[tools."http:chrome"]
+version = "latest"
+extract_all = true
+version_list_url = "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE"
+url = "https://storage.googleapis.com/chrome-for-testing-public/{{version}}/linux64/chrome-linux64.zip"
+
+[tools."http:chromedriver"]
+version = "latest"
+extract_all = true
+version_list_url = "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE"
+url = "https://storage.googleapis.com/chrome-for-testing-public/{{version}}/linux64/chromedriver-linux64.zip"
 
 [settings]
 experimental = true
@@ -55,6 +68,12 @@ use_git_credentials = true
 depends = ["assert:not-distrobox"]
 description = "Create development distrobox"
 run = "distrobox-assemble create --file https://raw.githubusercontent.com/jonerrr/devbox/refs/heads/main/distrobox.ini"
+
+[tasks.dev-chrome]
+description = "Startup chrome with CDP"
+run = """
+chrome --user-data-dir="$HOME/.local/share/dev-chrome" --remote-debugging-port=9222 about:blank
+"""
 
 [tasks."project:dump"]
 description = "Dump non-gitignored files into Sync directory"
