@@ -1,0 +1,4 @@
+# Repository guidance must not deploy over ~/AGENTS.md.
+AGENTS.md
+# Dot-prefixed source directories such as .agents/ are ignored automatically.
+# Do not ignore the .agents destination: it is managed by dot_agents/.

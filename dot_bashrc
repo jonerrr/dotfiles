@@ -1,0 +1,30 @@
+
+# ~/.bashrc
+
+# User executable directories
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+
+# JetBrains Toolbox
+export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/scripts"
+
+if [[ $- == *i* ]]; then
+    # Interactive shells only: avoid Distrobox hooks
+    # interfering with piped SSH stdin.
+    if [ -r /etc/bashrc ]; then
+        . /etc/bashrc
+    fi
+
+    # User aliases and functions
+    for rc in "$HOME"/.bashrc.d/*; do
+        if [ -f "$rc" ]; then
+            . "$rc"
+        fi
+    done
+    unset rc
+
+    # Keep this LAST, after other PATH modifications.
+    eval "$(mise activate bash)"
+else
+    # Non-interactive shells, including Codex.
+    export PATH="$HOME/.local/share/mise/shims:$PATH"
+fi

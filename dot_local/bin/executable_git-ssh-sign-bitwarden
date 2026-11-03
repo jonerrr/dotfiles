@@ -1,0 +1,4 @@
+#!/bin/sh
+# Use Bitwarden for Git SSH signatures regardless of the editor's agent.
+export SSH_AUTH_SOCK="$HOME/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock"
+exec /usr/bin/ssh-keygen "$@"

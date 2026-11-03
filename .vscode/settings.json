@@ -1,0 +1,11 @@
+{
+  "files.associations": {
+    "*.json.tmpl": "json",
+    "*.jsonc.tmpl": "jsonc",
+    "*.toml.tmpl": "toml",
+    "*.yaml.tmpl": "yaml",
+    "*.yml.tmpl": "yaml",
+    "*.md.tmpl": "markdown",
+    "*.sh.tmpl": "shellscript"
+  }
+}

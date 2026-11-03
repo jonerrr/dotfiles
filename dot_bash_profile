@@ -1,0 +1,7 @@
+
+# ~/.bash_profile
+
+# Load common Bash environment for login shells.
+if [ -r "$HOME/.bashrc" ]; then
+    . "$HOME/.bashrc"
+fi

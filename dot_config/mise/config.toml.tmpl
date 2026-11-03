@@ -1,14 +1,26 @@
 [tools]
+# MCP tools
+"npm:@upstash/context7-mcp" = "latest"
+"npm:@sveltejs/mcp" = "latest"
+"npm:@playwright/mcp" = "latest"
+"npm:chrome-devtools-mcp" = "latest"
+"npm:kubernetes-mcp-server" = "latest"
+"npm:mcp-remote" = "latest"
+
 # Dev utils
 "aqua:boyter/scc" = "latest"
 "aqua:cli/cli" = "latest"
 "github:jdx/fnox" = "latest"
 "github:cargo-bins/cargo-binstall" = "latest"
 "cargo:cargo-edit" = "latest"
-"cargo:sqlx-cli" = { version = "latest", default-features = false, features = "native-tls,postgres" }
 # "aqua:zellij-org/zellij" = "latest"
 "npm:@shopify/cli" = "latest"
 "github:containers/podman-tui" = "latest"
+"github:pranshuparmar/witr" = "latest"
+"aqua:openai/codex" = "latest"
+"aqua:anthropics/claude-code" = "latest"
+"github:can1357/oh-my-pi" = "latest"
+"agy" = "latest"
 # k8s tools
 "aqua:fluxcd/flux2" = "latest"
 "aqua:kubernetes/kubernetes/kubectl" = "latest"
@@ -18,9 +30,11 @@
 # langs and runtimes
 "core:node" = "latest"
 "core:go" = "latest"
+"core:rust" = { version = "latest", profile = "default", components = ["rust-analyzer", "rust-src"] }
 # TODO: figure out why aqua latest tag is broken for some packages
 "github:astral-sh/uv" = "latest"
 "aqua:astral-sh/ruff" = "latest"
+"aqua:hadolint/hadolint" = "latest"
 "aqua:pnpm" = "latest"
 "aqua:yarn" = "latest"
 # security / container tools
@@ -35,28 +49,28 @@
 "github:yt-dlp/yt-dlp" = "latest"
 "aqua:aristocratos/btop" = "latest"
 "github:simulot/immich-go" = "latest"
-"cargo:dua-cli" = "latest"
+"aqua:Byron/dua-cli" = "latest"
+"aqua:typst/typst" = "latest"
 "cargo:tex-fmt" = "latest"
 "go:github.com/bigwhite/issue2md/cmd/issue2md" = "latest"
 "aqua:jdx/usage" = "latest"
-"github:pranshuparmar/witr" = "latest"
-"aqua:openai/codex" = "latest"
-"aqua:anthropics/claude-code" = "latest"
-"github:can1357/oh-my-pi" = "latest"
 
 [tools."http:chrome"]
 version = "latest"
-extract_all = true
+# extract_all = true
 version_list_url = "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE"
-url = "https://storage.googleapis.com/chrome-for-testing-public/{{version}}/linux64/chrome-linux64.zip"
+url = "https://storage.googleapis.com/chrome-for-testing-public/{{ "{{version}}" }}/linux64/chrome-linux64.zip"
+# bin_path = "chrome-linux64"
 
 [tools."http:chromedriver"]
 version = "latest"
-extract_all = true
+# bin_path = "chromedriver-linux64"
 version_list_url = "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE"
-url = "https://storage.googleapis.com/chrome-for-testing-public/{{version}}/linux64/chromedriver-linux64.zip"
+url = "https://storage.googleapis.com/chrome-for-testing-public/{{ "{{version}}" }}/linux64/chromedriver-linux64.zip"
 
 [settings]
+task.run_auto_install = false
+disable_backends = ["brew", "asdf"]
 experimental = true
 lockfile = true
 minimum_release_age = "1d"
@@ -242,7 +256,7 @@ confirm = "Are you sure you want to restore qemu configurations? This will overw
 description = "Restore qemu configurations to /etc/libvirt/qemu"
 run = """
 sudo systemctl stop libvirtd
-sudo rsync -av --delete --chown=root:root /home/jonah/qemu/ /etc/libvirt/qemu/
+sudo rsync -av --delete --chown=root:root "{{ .chezmoi.homeDir }}/qemu/" /etc/libvirt/qemu/
 sudo restorecon -R /etc/libvirt/qemu || true
 sudo systemctl start libvirtd
 """
@@ -260,3 +274,46 @@ if [[ -n "${DISTROBOX_ENTER_PATH:-}" || -n "${DISTROBOX_CONTAINER_NAME:-}" ]]; t
   exit 1
 fi
 """
+
+[tasks."mcp:context7"]
+run = "context7-mcp"
+raw = true
+quiet = true
+
+[tasks."mcp:svelte"]
+run = "svelte-mcp"
+raw = true
+quiet = true
+
+[tasks."mcp:kubernetes"]
+run = 'test -r "{{ .chezmoi.homeDir }}/.kube/mcp-viewer.kubeconfig" && exec kubernetes-mcp-server --config "{{ .chezmoi.homeDir }}/.agents/kubernetes.toml"'
+raw = true
+quiet = true
+
+[tasks."mcp:kubernetes".env]
+KUBECONFIG = "{{ .chezmoi.homeDir }}/.kube/mcp-viewer.kubeconfig"
+
+[tasks."mcp:playwright"]
+run = 'playwright-mcp --headless --isolated --executable-path "{{ .chezmoi.homeDir }}/.local/share/mise/installs/http-chrome/latest/chrome"'
+raw = true
+quiet = true
+
+[tasks."mcp:playwright-headed"]
+run = 'playwright-mcp --isolated --executable-path "{{ .chezmoi.homeDir }}/.local/share/mise/installs/http-chrome/latest/chrome"'
+raw = true
+quiet = true
+
+[tasks."mcp:chrome-devtools"]
+run = "chrome-devtools-mcp --browser-url=http://127.0.0.1:9222 --no-usage-statistics"
+raw = true
+quiet = true
+
+[tasks."mcp:stitch"]
+run = "mcp-remote https://stitch.googleapis.com/mcp --header 'X-Goog-Api-Key:${STITCH_API_KEY}'"
+raw = true
+quiet = true
+
+[tasks."mcp:cloudflare"]
+run = "mcp-remote https://mcp.cloudflare.com/mcp"
+raw = true
+quiet = true

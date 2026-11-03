@@ -1,0 +1,36 @@
+# chezmoi:modify-template
+{{- $live := .chezmoi.stdin | fromToml -}}
+{{- $before := $live | toJson -}}
+{{- $agentsDir := joinPath .chezmoi.homeDir ".agents" | toJson -}}
+{{- $desired := printf `approvals_reviewer = "auto_review"
+
+[mcp_servers.svelte]
+command = "/usr/bin/mise"
+args = ["-C", %[1]s, "run", "mcp:svelte"]
+
+[mcp_servers.context7]
+command = "/usr/bin/mise"
+args = ["-C", %[1]s, "run", "mcp:context7"]
+
+[mcp_servers.kubernetes]
+command = "/usr/bin/mise"
+args = ["-C", %[1]s, "run", "mcp:kubernetes"]
+
+[mcp_servers.mirrord]
+url = "https://metalbear.com/mirrord/docs/~gitbook/mcp"
+
+[mcp_servers.playwright]
+command = "/usr/bin/mise"
+args = ["-C", %[1]s, "run", "mcp:playwright"]
+
+` $agentsDir | fromToml -}}
+{{- $_ := set $live "approvals_reviewer" $desired.approvals_reviewer -}}
+{{- if not (hasKey $live "mcp_servers") }}{{ $_ := set $live "mcp_servers" dict }}{{ end -}}
+{{- range $name, $server := $desired.mcp_servers -}}
+{{- $_ := set $live.mcp_servers $name $server -}}
+{{- end -}}
+{{- if eq $before ($live | toJson) -}}
+{{ .chezmoi.stdin }}
+{{- else -}}
+{{ $live | toToml }}
+{{- end -}}

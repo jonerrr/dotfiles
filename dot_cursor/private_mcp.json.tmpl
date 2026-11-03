@@ -1,0 +1,49 @@
+{
+  "mcpServers": {
+    "svelte": {
+      "command": "/usr/bin/mise",
+      "args": [
+        "-C",
+        {{ joinPath .chezmoi.homeDir ".agents" | toJson }},
+        "run",
+        "mcp:svelte"
+      ]
+    },
+    "stitch": {
+      "command": "/usr/bin/mise",
+      "args": [
+        "-C",
+        {{ joinPath .chezmoi.homeDir ".agents" | toJson }},
+        "run",
+        "mcp:stitch"
+      ]
+    },
+    "context7": {
+      "command": "/usr/bin/mise",
+      "args": [
+        "-C",
+        {{ joinPath .chezmoi.homeDir ".agents" | toJson }},
+        "run",
+        "mcp:context7"
+      ]
+    },
+    "kubernetes": {
+      "command": "/usr/bin/mise",
+      "args": [
+        "-C",
+        {{ joinPath .chezmoi.homeDir ".agents" | toJson }},
+        "run",
+        "mcp:kubernetes"
+      ]
+    },
+    "playwright": {
+      "command": "/usr/bin/mise",
+      "args": [
+        "-C",
+        {{ joinPath .chezmoi.homeDir ".agents" | toJson }},
+        "run",
+        "mcp:playwright"
+      ]
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "/usr/bin/mise",
+      "args": [
+        "-C",
+        {{ joinPath .chezmoi.homeDir ".agents" | toJson }},
+        "run",
+        "mcp:context7"
+      ],
+      "type": "local",
+      "tools": [
+        "*"
+      ]
+    },
+    "deepwiki": {
+      "type": "http",
+      "url": "https://mcp.deepwiki.com/sse",
+      "tools": [
+        "*"
+      ]
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "tools": [
+        "*"
+      ]
+    },
+    "kubernetes": {
+      "command": "/usr/bin/mise",
+      "args": [
+        "-C",
+        {{ joinPath .chezmoi.homeDir ".agents" | toJson }},
+        "run",
+        "mcp:kubernetes"
+      ],
+      "type": "local",
+      "tools": [
+        "*"
+      ]
+    },
+    "playwright": {
+      "command": "/usr/bin/mise",
+      "args": [
+        "-C",
+        {{ joinPath .chezmoi.homeDir ".agents" | toJson }},
+        "run",
+        "mcp:playwright"
+      ],
+      "type": "local",
+      "tools": [
+        "*"
+      ]
+    },
+    "stitch": {
+      "command": "/usr/bin/mise",
+      "args": [
+        "-C",
+        {{ joinPath .chezmoi.homeDir ".agents" | toJson }},
+        "run",
+        "mcp:stitch"
+      ],
+      "type": "local",
+      "tools": [
+        "*"
+      ]
+    },
+    "svelte": {
+      "command": "/usr/bin/mise",
+      "args": [
+        "-C",
+        {{ joinPath .chezmoi.homeDir ".agents" | toJson }},
+        "run",
+        "mcp:svelte"
+      ],
+      "type": "local",
+      "tools": [
+        "*"
+      ]
+    }
+  }
+}
