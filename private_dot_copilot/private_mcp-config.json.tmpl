@@ -15,7 +15,7 @@
     },
     "deepwiki": {
       "type": "http",
-      "url": "https://mcp.deepwiki.com/sse",
+      "url": "https://mcp.deepwiki.com/mcp",
       "tools": [
         "*"
       ]
@@ -73,6 +73,19 @@
         {{ joinPath .chezmoi.homeDir ".agents" | toJson }},
         "run",
         "mcp:svelte"
+      ],
+      "type": "local",
+      "tools": [
+        "*"
+      ]
+    },
+    "datadog": {
+      "command": "/usr/bin/mise",
+      "args": [
+        "-C",
+        {{ joinPath .chezmoi.homeDir ".agents" | toJson }},
+        "run",
+        "mcp:datadog"
       ],
       "type": "local",
       "tools": [

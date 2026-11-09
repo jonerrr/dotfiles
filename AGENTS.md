@@ -35,7 +35,7 @@ Read this file before reviewing drift, editing or deploying dotfiles, or maintai
 ## Partial ownership
 
 - `dot_codex/modify_private_config.toml` owns `approvals_reviewer` and its declared MCP subset. Other app preferences, project trust, onboarding, plugins, and generated registrations remain local. Inspect extra MCP and approval keys during reviews; preserving a key is not approval of it.
-- `~/.claude/settings.json`, `~/.cursor/cli-config.json`, and `~/.omp/agent/config.yml` remain local and unmanaged because they change during normal client use. Keep their MCP registrations managed separately; do not enroll these settings files implicitly.
+- `~/.claude/settings.json`, and `~/.cursor/cli-config.json` remain local and unmanaged because they change during normal client use. Keep their MCP registrations managed separately; do not enroll these settings files implicitly.
 - Native approval and sandbox settings are separate from behavioral instructions. Do not add broad launcher/interpreter grants. Preserve read-only Kubernetes access and other intentionally restricted integrations.
 
 ## Mise and MCP

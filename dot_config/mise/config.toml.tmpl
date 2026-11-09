@@ -1,26 +1,15 @@
 [tools]
-# MCP tools
-"npm:@upstash/context7-mcp" = "latest"
-"npm:@sveltejs/mcp" = "latest"
-"npm:@playwright/mcp" = "latest"
-"npm:chrome-devtools-mcp" = "latest"
-"npm:kubernetes-mcp-server" = "latest"
-"npm:mcp-remote" = "latest"
-
 # Dev utils
 "aqua:boyter/scc" = "latest"
 "aqua:cli/cli" = "latest"
 "github:jdx/fnox" = "latest"
 "github:cargo-bins/cargo-binstall" = "latest"
 "cargo:cargo-edit" = "latest"
+"aqua:zizmorcore/zizmor" = "latest"
 # "aqua:zellij-org/zellij" = "latest"
 "npm:@shopify/cli" = "latest"
 "github:containers/podman-tui" = "latest"
 "github:pranshuparmar/witr" = "latest"
-"aqua:openai/codex" = "latest"
-"aqua:anthropics/claude-code" = "latest"
-"github:can1357/oh-my-pi" = "latest"
-"agy" = "latest"
 # k8s tools
 "aqua:fluxcd/flux2" = "latest"
 "aqua:kubernetes/kubernetes/kubectl" = "latest"
@@ -43,6 +32,7 @@
 "aqua:FiloSottile/age" = "latest"
 "aqua:getsops/sops" = "latest"
 "cargo:blue-build" = "latest"
+"aqua:doy/rbw" = "latest"
 # backups
 "github:creativeprojects/resticprofile" = "latest"
 # misc
@@ -54,6 +44,22 @@
 "cargo:tex-fmt" = "latest"
 "go:github.com/bigwhite/issue2md/cmd/issue2md" = "latest"
 "aqua:jdx/usage" = "latest"
+# AI
+# "aqua:openai/codex" = "latest"
+"aqua:anthropics/claude-code" = "latest"
+"github:can1357/oh-my-pi" = "latest"
+"agy" = "latest"
+"cursor-agent" = "latest"
+
+"npm:@getpaseo/cli" = "latest"
+
+"npm:@upstash/context7-mcp" = "latest"
+"npm:@sveltejs/mcp" = "latest"
+"npm:@playwright/mcp" = "latest"
+"npm:chrome-devtools-mcp" = "latest"
+"npm:kubernetes-mcp-server" = "latest"
+"npm:mcp-remote" = "latest"
+"npm:ahp-acp-gateway" = "latest"
 
 [tools."http:chrome"]
 version = "latest"
@@ -280,6 +286,12 @@ run = "context7-mcp"
 raw = true
 quiet = true
 
+[tasks.ahp-acp-gateway]
+description = "Start the local AHP gateway for OMP, Cursor Agent, and Antigravity CLI"
+run = 'exec ahp-acp-gateway --config "{{ .chezmoi.homeDir }}/.config/ahp-acp-gateway/config.json"'
+raw = true
+quiet = true
+
 [tasks."mcp:svelte"]
 run = "svelte-mcp"
 raw = true
@@ -315,5 +327,10 @@ quiet = true
 
 [tasks."mcp:cloudflare"]
 run = "mcp-remote https://mcp.cloudflare.com/mcp"
+raw = true
+quiet = true
+
+[tasks."mcp:datadog"]
+run = "mcp-remote https://mcp.us5.datadoghq.com/v1/mcp"
 raw = true
 quiet = true

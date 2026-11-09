@@ -44,6 +44,15 @@
         "run",
         "mcp:playwright"
       ]
+    },
+    "datadog": {
+      "command": "/usr/bin/mise",
+      "args": [
+        "-C",
+        {{ joinPath .chezmoi.homeDir ".agents" | toJson }},
+        "run",
+        "mcp:datadog"
+      ]
     }
   }
 }

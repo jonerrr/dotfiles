@@ -23,6 +23,10 @@ url = "https://metalbear.com/mirrord/docs/~gitbook/mcp"
 command = "/usr/bin/mise"
 args = ["-C", %[1]s, "run", "mcp:playwright"]
 
+[mcp_servers.datadog]
+command = "/usr/bin/mise"
+args = ["-C", %[1]s, "run", "mcp:datadog"]
+
 ` $agentsDir | fromToml -}}
 {{- $_ := set $live "approvals_reviewer" $desired.approvals_reviewer -}}
 {{- if not (hasKey $live "mcp_servers") }}{{ $_ := set $live "mcp_servers" dict }}{{ end -}}

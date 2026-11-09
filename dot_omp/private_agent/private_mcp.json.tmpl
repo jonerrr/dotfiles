@@ -39,6 +39,16 @@
         "mcp:playwright"
       ],
       "type": "stdio"
+    },
+    "datadog": {
+      "command": "/usr/bin/mise",
+      "args": [
+        "-C",
+        {{ joinPath .chezmoi.homeDir ".agents" | toJson }},
+        "run",
+        "mcp:datadog"
+      ],
+      "type": "stdio"
     }
   }
 }

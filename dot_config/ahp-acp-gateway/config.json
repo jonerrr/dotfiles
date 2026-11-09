@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "listener": {
+    "host": "127.0.0.1",
+    "port": 8765,
+    "path": "/ahp"
+  },
+  "providers": [
+    { "id": "copilot", "enabled": false },
+    { "id": "claude", "enabled": false },
+    { "id": "gemini", "enabled": false },
+    { "id": "qwen", "enabled": false },
+    { "id": "auggie", "enabled": false },
+    { "id": "qoder", "enabled": false },
+    { "id": "codex", "enabled": false },
+    { "id": "opencode", "enabled": false },
+    { "id": "openclaw", "enabled": false },
+    { "id": "kiro", "enabled": false },
+    { "id": "hermes", "enabled": false },
+    { "id": "kimi", "enabled": false },
+    { "id": "pi", "enabled": false },
+    {
+      "id": "cursor",
+      "displayName": "Cursor Agent",
+      "command": "cursor-agent",
+      "args": ["acp"],
+      "startupTimeoutMs": 120000
+    },
+    {
+      "id": "agy",
+      "displayName": "Antigravity CLI",
+      "command": "agy",
+      "args": ["acp"],
+      "startupTimeoutMs": 30000
+    },
+    {
+      "id": "omp",
+      "displayName": "Oh My Pi",
+      "command": "omp",
+      "args": ["acp"],
+      "startupTimeoutMs": 120000
+    }
+  ]
+}
