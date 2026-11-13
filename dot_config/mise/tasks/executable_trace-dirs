@@ -1,0 +1,85 @@
+#!/usr/bin/env nu
+#MISE description="Trace directories accessed by a command using strace for sandbox allowlists"
+#MISE raw=true
+
+def extract-paths [lines: list<string>] {
+  $lines
+  | each {|line|
+    $line
+    | split row '"'
+    | enumerate
+    | where {|x| ($x.index mod 2) == 1 }
+    | get item
+    | where {|p| ($p | str starts-with "/") and not ($p =~ '^/(proc|sys|dev|tmp)(/|$)') }
+  }
+  | flatten
+  | uniq
+  | each {|p|
+    let dir = if ($p | path exists) and (($p | path type) == "dir") {
+      $p
+    } else {
+      $p | path dirname
+    }
+    if ($dir =~ '^/(usr|lib|lib64|etc)(/|$)') {
+      $dir | parse --regex '^(?P<root>/(?:usr|lib|lib64|etc))' | get root.0
+    } else {
+      $dir
+    }
+  }
+  | uniq
+  | sort
+}
+
+def to-tilde [dirs: list<string>] {
+  let home = $env.HOME
+  $dirs | each {|d|
+    if $d == $home {
+      "~"
+    } else if ($d | str starts-with $"($home)/") {
+      $d | str replace $home "~"
+    } else {
+      $d
+    }
+  }
+}
+
+def --wrapped main [...cmd: string] {
+  if ($cmd | is-empty) {
+    print -e "Usage: mise run trace-dirs -- <command> [args...]"
+    exit 1
+  }
+
+  let log = (^mktemp --suffix .strace.log | str trim)
+
+  let exit_code = try {
+    ^strace -f -e trace=%file -o $log $cmd.0 ...($cmd | skip 1)
+    0
+  } catch {
+    $env.LAST_EXIT_CODE
+  }
+
+  let lines = (
+    open --raw $log
+    | lines
+    | where {|l| not ($l =~ ' = -1 ') and ($l =~ '"[^"]+"') }
+  )
+
+  ^rm -f $log
+
+  let write_pattern = '(O_WRONLY|O_RDWR|O_CREAT|O_TRUNC|O_APPEND)|\b(mkdir|mkdirat|rmdir|unlink|unlinkat|rename|renameat|renameat2|symlink|symlinkat|link|linkat|chmod|fchmodat|chown|fchownat|truncate)\('
+
+  let write_lines = ($lines | where {|l| $l =~ $write_pattern })
+  let read_lines = ($lines | where {|l| not ($l =~ $write_pattern) })
+
+  let write_dirs = (to-tilde (extract-paths $write_lines))
+  let read_dirs = (to-tilde (extract-paths $read_lines))
+
+  print ""
+  print "=== Sandbox directories ==="
+  print $"allow_read = ($read_dirs | to json --raw)"
+  print $"allow_write = ($write_dirs | to json --raw)"
+
+  if $exit_code != 0 {
+    exit $exit_code
+  }
+}

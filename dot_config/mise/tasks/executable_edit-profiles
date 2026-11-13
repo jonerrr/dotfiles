@@ -1,0 +1,58 @@
+#!/usr/bin/env nu
+#MISE description="Edit profiles.toml from Vaultwarden in VSCode, validate, copy to clipboard, and apply"
+#MISE raw=true
+
+# Note: `rbw edit` (v1.15.0) returns HTTP 422 from Vaultwarden on Secure Notes and
+# Login items without a password, so this task uses wl-copy + rbw sync + chezmoi apply.
+
+def main [] {
+  let item = "chezmoi-autorestic-profiles-toml"
+
+  try {
+    ^rbw unlocked
+  } catch {
+    ^rbw unlock
+  }
+
+  ^rbw sync
+
+  let original = (^rbw get --raw $item | from json | get notes)
+  if ($original | is-empty) {
+    error make { msg: $"Vaultwarden item '($item)' has empty notes." }
+  }
+
+  let dir = (^mktemp -d | str trim)
+  let file = ($dir | path join "profiles.toml")
+  $original | save --force $file
+  ^chmod 600 $file
+
+  try {
+    ^code --wait $file
+    let edited = (open --raw $file)
+
+    if $edited == $original {
+      print "No changes made."
+      ^rm -rf $dir
+      return
+    }
+
+    let check = (^resticprofile -c $file --dry-run show | complete)
+    if $check.exit_code != 0 {
+      print -e $check.stderr
+      ^rm -rf $dir
+      error make { msg: "resticprofile validation failed; aborted." }
+    }
+
+    $edited | ^wl-copy
+  } catch {|err|
+    ^rm -rf $dir
+    error make { msg: $err.msg }
+  }
+
+  ^rm -rf $dir
+
+  input "Validated and copied to clipboard. Paste into Vaultwarden, then press Enter to sync & apply..."
+  ^rbw sync
+  ^chezmoi apply ~/profiles.toml
+  print "Updated ~/profiles.toml."
+}

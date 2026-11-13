@@ -20,7 +20,7 @@ Read this file before reviewing drift, editing or deploying dotfiles, or maintai
 ## Private data and publication
 
 - Treat the repository as public. Keep credentials encrypted with age, or outside the source tree. Never copy credentials into reports or documentation. `private_` controls permissions; it does not encrypt content.
-- `.gitconfig` and `~/.agents/mise.local.toml` have encrypted sources and deploy with mode 0600. Refresh their ciphertext deliberately when live values change.
+- `profiles.toml` and `~/.config/rclone/rclone.conf` are sourced from Vaultwarden via `rbw` templates (`readonly_private_...`, mode `0400`). `.gitconfig` is unencrypted (`private_dot_gitconfig`, mode `0600`). Other local credentials (such as `~/.agents/mise.local.toml`, `~/.config/cloudflared/*.env`, and `~/.wakatime.cfg`) are kept outside the source tree.
 - Keep encryption identities, repository-unlock passwords, OAuth stores, login state, histories, caches, and local recovery artifacts outside the source set. Verify independent access to recovery credentials.
 - Check plaintext sources and relevant Git history before publication. Local checkpoint refs can contain application state; do not publish them implicitly or use mirror pushes for this repository.
 

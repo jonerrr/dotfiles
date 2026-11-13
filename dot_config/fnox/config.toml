@@ -1,0 +1,15 @@
+[providers.bitwarden]
+type = "bitwarden"
+backend = "rbw"
+auth_command = "rbw unlock"
+
+[providers.age]
+type = "age"
+recipients = ["age1zst2avjydt6glwzvqe9f8tv80n030q7jzderz0x2x8jlyzn2tdgqm0czr5"]
+identity = { provider = "bitwarden", value = "fnox-age-personal/notes" }
+
+[secrets]
+KUBECONFIG = { provider = "bitwarden", value = "k3s-kubeconfig/notes", as_file = true, env = "exec" }
+
+[profiles.omp.secrets]
+KUBECONFIG = { provider = "bitwarden", value = "k3s-kubeconfig-mcp-viewonly/notes", as_file = true, env = "exec" }

@@ -1,0 +1,20 @@
+[user]
+	name = Jonah
+	email = 73760377+jonerrr@users.noreply.github.com
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC/DcwJBBchUw5A2lIzF7oG9oPQlkBTGlFMdOG/RWi7P
+[commit]
+	gpgsign = true
+[tag]
+	gpgSign = false
+[credential "https://github.com"]
+	helper = 
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !gh auth git-credential
+[init]
+	defaultBranch = main
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = {{ .chezmoi.homeDir }}/.local/bin/git-ssh-sign-bitwarden

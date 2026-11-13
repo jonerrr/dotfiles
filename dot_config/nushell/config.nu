@@ -51,3 +51,23 @@ alias frc = flux reconcile kustomization cluster-apps --with-source
 alias dht = distrobox-host-exec fish
 
 use ($nu.default-config-dir | path join mise.nu)
+
+def --wrapped omp [...args: string] {
+  ^fnox -P omp exec --only KUBECONFIG -- mise run omp -- ...$args
+}
+
+def --wrapped kubectl [...args: string] {
+  ^fnox exec --only KUBECONFIG -- kubectl ...$args
+}
+
+def --wrapped k9s [...args: string] {
+  ^fnox exec --only KUBECONFIG -- k9s ...$args
+}
+
+def --wrapped flux [...args: string] {
+  ^fnox exec --only KUBECONFIG -- flux ...$args
+}
+
+def --wrapped helm [...args: string] {
+  ^fnox exec --only KUBECONFIG -- helm ...$args
+}

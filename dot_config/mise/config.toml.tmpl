@@ -298,12 +298,9 @@ raw = true
 quiet = true
 
 [tasks."mcp:kubernetes"]
-run = 'test -r "{{ .chezmoi.homeDir }}/.kube/mcp-viewer.kubeconfig" && exec kubernetes-mcp-server --config "{{ .chezmoi.homeDir }}/.agents/kubernetes.toml"'
+run = "printf 'read_only = true\\n' | exec kubernetes-mcp-server --config -"
 raw = true
 quiet = true
-
-[tasks."mcp:kubernetes".env]
-KUBECONFIG = "{{ .chezmoi.homeDir }}/.kube/mcp-viewer.kubeconfig"
 
 [tasks."mcp:playwright"]
 run = 'playwright-mcp --headless --isolated --executable-path "{{ .chezmoi.homeDir }}/.local/share/mise/installs/http-chrome/latest/chrome"'
@@ -334,3 +331,33 @@ quiet = true
 run = "mcp-remote https://mcp.us5.datadoghq.com/v1/mcp"
 raw = true
 quiet = true
+
+[tasks.omp]
+description = "Run omp in a filesystem sandbox"
+raw = true
+allow_read = [
+  ".",
+  "~/.omp",
+  "~/.agents",
+  "~/.config/mise",
+  "~/.local/share/mise",
+  "~/.config/git",
+  "~/.gitconfig",
+  "~/.config/gh",
+  "~/.mcp-auth",
+  "~/.local/share/dev-chrome",
+  "~/.cache",
+  "~/.local/state",
+  "~/.bun",
+  "~/.npm",
+]
+allow_write = [
+  ".",
+  "~/.omp",
+  "~/.mcp-auth",
+  "~/.local/share/dev-chrome",
+  "~/.cache",
+  "~/.local/state",
+  "~/.bun",
+]
+run = "exec omp"
