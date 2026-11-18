@@ -1,3 +1,5 @@
+default_provider = "age"
+
 [providers.bitwarden]
 type = "bitwarden"
 backend = "rbw"

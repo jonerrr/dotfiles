@@ -6,7 +6,7 @@
 "github:cargo-bins/cargo-binstall" = "latest"
 "cargo:cargo-edit" = "latest"
 "aqua:zizmorcore/zizmor" = "latest"
-# "aqua:zellij-org/zellij" = "latest"
+"aqua:zellij-org/zellij" = "latest"
 "npm:@shopify/cli" = "latest"
 "github:containers/podman-tui" = "latest"
 "github:pranshuparmar/witr" = "latest"
@@ -15,6 +15,7 @@
 "aqua:kubernetes/kubernetes/kubectl" = "latest"
 "aqua:helm/helm" = "latest"
 "github:derailed/k9s" = "latest"
+"aqua:metalbear-co/mirrord" = "latest"
 # krew = "latest"
 # langs and runtimes
 "core:node" = "latest"
@@ -45,7 +46,7 @@
 "go:github.com/bigwhite/issue2md/cmd/issue2md" = "latest"
 "aqua:jdx/usage" = "latest"
 # AI
-# "aqua:openai/codex" = "latest"
+"aqua:openai/codex" = "latest"
 "aqua:anthropics/claude-code" = "latest"
 "github:can1357/oh-my-pi" = "latest"
 "agy" = "latest"
@@ -112,9 +113,9 @@ confirm = "BE SURE TO SAVE ANY UNCOMMITTED WORK! This will overwrite all non-git
 description = "Overwrite project files from Sync directory"
 run = "tar -xzvf ~/Sync/project-state.tar.gz"
 
-[tasks.export-code]
-description = "Export VSCode from distrobox to host (with wayland set as display server)"
-run = "distrobox-export --app code --extra-flags '--ozone-platform-hint=auto %U' && distrobox-export --bin /usr/bin/code"
+# [tasks.export-code]
+# description = "Export VSCode from distrobox to host (with wayland set as display server)"
+# run = "distrobox-export --app code && distrobox-export --bin /usr/bin/code"
 
 [tasks.update-dconf]
 depends = ["assert:not-distrobox"]
@@ -333,8 +334,12 @@ raw = true
 quiet = true
 
 [tasks.omp]
-description = "Run omp in a filesystem sandbox"
+description = "Run omp in a filesystem and Unix socket sandbox"
+dir = "{{ "{{ cwd }}" }}"
 raw = true
+# deny_unix = true
+# omp's local daemons use sockets under this directory.
+# allow_unix = ["~/.omp/run/daemons"]
 allow_read = [
   ".",
   "~/.omp",
@@ -345,19 +350,58 @@ allow_read = [
   "~/.gitconfig",
   "~/.config/gh",
   "~/.mcp-auth",
+  # Cargo's global tools, dependency store, and configuration.
+  "~/.cargo",
+  "~/.rustup",
   "~/.local/share/dev-chrome",
+  "~/.local/share/uv/python",
   "~/.cache",
   "~/.local/state",
   "~/.bun",
   "~/.npm",
+  "/run/user/1000/pnpm-store-operation-locks-1000",
+  "~/.bash_profile",
+  "~/.bashrc"
 ]
 allow_write = [
   ".",
   "~/.omp",
   "~/.mcp-auth",
+  "~/.cargo/bin",
+  "~/.cargo/registry",
+  "~/.cargo/git",
   "~/.local/share/dev-chrome",
   "~/.cache",
   "~/.local/state",
   "~/.bun",
+  "/run/user/1000/pnpm-store-operation-locks-1000",
+  "/var/tmp"
+]
+allow_env = [
+  "KUBECONFIG",
+  "SHELL",
+  "EDITOR",
+  "VISUAL",
+  "XDG_*",
+  "WAYLAND_DISPLAY",
+  "DISPLAY",
+  "DBUS_SESSION_BUS_ADDRESS",
+  "VK_ICD_FILENAMES",
+  "ELECTRON_OZONE_PLATFORM_HINT",
+  "MISE_*",
+  "CARGO_*",
+  "RUSTUP_*",
+  "UV_*",
+  "PNPM_*",
+  "NPM_*",
+  "NODE_*",
+  "BUN_*",
+  "HTTP_PROXY",
+  "HTTPS_PROXY",
+  "NO_PROXY",
+  "http_proxy",
+  "https_proxy",
+  "no_proxy",
+  "SSL_CERT_*",
 ]
 run = "exec omp"

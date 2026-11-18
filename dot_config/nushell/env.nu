@@ -20,6 +20,13 @@
 let mise_path = $nu.default-config-dir | path join mise.nu
 ^mise activate nu | save $mise_path --force
 
+let runtime_dir = $"/run/user/(id -u | str trim)"
+let socket_dir = $"($runtime_dir)/zellij"
+
+if ($runtime_dir | path exists) {
+    $env.ZELLIJ_SOCKET_DIR = $socket_dir
+}
+
 # pnpm
 # $env.PNPM_HOME = "/var/home/jonah/.local/share/pnpm"
 # $env.PATH = ($env.PATH | split row (char esep) | prepend ($env.PNPM_HOME | path join "bin") )
