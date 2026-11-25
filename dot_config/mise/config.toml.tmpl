@@ -39,7 +39,7 @@
 # misc
 "github:yt-dlp/yt-dlp" = "latest"
 "aqua:aristocratos/btop" = "latest"
-"github:simulot/immich-go" = "latest"
+# "github:simulot/immich-go" = "latest"
 "aqua:Byron/dua-cli" = "latest"
 "aqua:typst/typst" = "latest"
 "cargo:tex-fmt" = "latest"
@@ -51,8 +51,6 @@
 "github:can1357/oh-my-pi" = "latest"
 "agy" = "latest"
 "cursor-agent" = "latest"
-
-"npm:@getpaseo/cli" = "latest"
 
 "npm:@upstash/context7-mcp" = "latest"
 "npm:@sveltejs/mcp" = "latest"
@@ -211,6 +209,11 @@ if [[ -n "${DISTROBOX_ENTER_PATH:-}" || -n "${DISTROBOX_CONTAINER_NAME:-}" ]]; t
   exit 1
 fi
 """
+
+[tasks."mcp:nushell"]
+run = "nu --mcp"
+raw = true
+quiet = true
 
 [tasks."mcp:context7"]
 run = "context7-mcp"

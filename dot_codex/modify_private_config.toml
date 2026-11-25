@@ -4,6 +4,10 @@
 {{- $agentsDir := joinPath .chezmoi.homeDir ".agents" | toJson -}}
 {{- $desired := printf `approvals_reviewer = "auto_review"
 
+[mcp_servers.nushell]
+command = "/usr/bin/mise"
+args = ["-C", %[1]s, "run", "mcp:nushell"]
+
 [mcp_servers.svelte]
 command = "/usr/bin/mise"
 args = ["-C", %[1]s, "run", "mcp:svelte"]

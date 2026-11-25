@@ -1,5 +1,11 @@
 {
   "mcpServers": {
+    "nushell": {
+      "command": "/usr/bin/mise",
+      "args": ["-C", {{ joinPath .chezmoi.homeDir ".agents" | toJson }}, "run", "mcp:nushell"],
+      "type": "local",
+      "tools": ["*"]
+    },
     "context7": {
       "command": "/usr/bin/mise",
       "args": [
